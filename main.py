@@ -22,12 +22,13 @@ def instruction(line):
         opcode_bin = int(opcodes[opcode], 2)
         instruction_bin = (opcode_bin << 21) | (int(rm) << 16) | (rn << 5) | rd
         return instruction_bin
+
     # Shift instructions
     if opcode in ["LSL", "LSR"]:
         rd = get_register(parts[1])
         rn = get_register(parts[2])
         rm = 0
-        shamt = int(parts[3].replace("#", "")) & 0x3F
+        shamt = int(parts[3].replace("#", ""))
         opcodes = {
             "LSL": "11010011011",
             "LSR": "11010011010",
@@ -42,7 +43,7 @@ def instruction(line):
     if opcode in ["ADDI", "SUBI"]:
         rd = get_register(parts[1])
         rn = get_register(parts[2])
-        imm = int(parts[3].replace("#", "")) & 0xFFF
+        imm = int(parts[3].replace("#", ""))
         opcodes = {
             "ADDI": "1001000100",
             "SUBI": "1101000100",
@@ -55,7 +56,7 @@ def instruction(line):
     if opcode in ["LDUR", "STUR"]:
         rt = get_register(parts[1])
         rn = get_register(parts[2])
-        offset = int(parts[3].replace("#", "")) & 0x1FF
+        offset = int(parts[3].replace("#", ""))
         opcodes = {
             "LDUR": "11111000010",
             "STUR": "11111000000",
@@ -63,10 +64,11 @@ def instruction(line):
         opcode_bin = int(opcodes[opcode], 2)
         instruction_bin = (opcode_bin << 21) | (offset << 12) | (rn << 5) | rt
         return instruction_bin
+
     # CB-Format instructions
     if opcode in ["CBZ", "CBNZ"]:
         rt = get_register(parts[1])
-        imm = int(parts[2].replace("#", "")) & 0x7FFFF
+        imm = int(parts[2].replace("#", ""))
         opcodes = {
             "CBZ": "10110100",
             "CBNZ": "10110101",
@@ -74,9 +76,10 @@ def instruction(line):
         opcode_bin = int(opcodes[opcode], 2)
         instruction_bin = (opcode_bin << 24) | (imm << 5) | rt
         return instruction_bin
+
     # B-format instructions
     if opcode == "B":
-        imm = int(parts[1].replace("#", "")) & 0x3FFFFFF
+        imm = int(parts[1].replace("#", ""))
         opcode_bin = int("000101", 2)
         instruction_bin = (opcode_bin << 26) | imm
         return instruction_bin
