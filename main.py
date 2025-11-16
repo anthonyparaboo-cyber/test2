@@ -43,7 +43,7 @@ def instruction(line):
     if opcode in ["ADDI", "SUBI"]:
         rd = get_register(parts[1])
         rn = get_register(parts[2])
-        imm = int(parts[3].replace("#", ""))
+        imm = int(parts[3].replace("#", "")) & 0xFFF
         opcodes = {
             "ADDI": "1001000100",
             "SUBI": "1101000100",
@@ -56,7 +56,7 @@ def instruction(line):
     if opcode in ["LDUR", "STUR"]:
         rt = get_register(parts[1])
         rn = get_register(parts[2])
-        offset = int(parts[3].replace("#", ""))
+        offset = int(parts[3].replace("#", "")) & 0x1FF
         opcodes = {
             "LDUR": "11111000010",
             "STUR": "11111000000",
@@ -68,7 +68,7 @@ def instruction(line):
     # CB-Format instructions
     if opcode in ["CBZ", "CBNZ"]:
         rt = get_register(parts[1])
-        imm = int(parts[2].replace("#", ""))
+        imm = int(parts[2].replace("#", "")) & 0x7FFFF
         opcodes = {
             "CBZ": "10110100",
             "CBNZ": "10110101",
@@ -79,7 +79,7 @@ def instruction(line):
 
     # B-format instructions
     if opcode == "B":
-        imm = int(parts[1].replace("#", ""))
+        imm = int(parts[1].replace("#", "")) & 0x3FFFFFF
         opcode_bin = int("000101", 2)
         instruction_bin = (opcode_bin << 26) | imm
         return instruction_bin
@@ -91,11 +91,15 @@ program = [
     "LDUR X4, X5, #8",
     "STUR X6, X7, #16",
     "SUB X10, X11, X12",
-    "CBZ X13, #32",
+    "CBZ X13, #-5",
     "CBNZ X14, #64",
     "B #128",
     "LSL X15, X16, #2",
     "LSR X17, X18, #3",
+    "AND X19, X20, X21",
+    "ORR X22, X23, X24",
+    "EOR X25, X26, X27",
+    "MUL X28, X29, X30",
 ]
 
 for line in program:
