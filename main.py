@@ -22,6 +22,21 @@ def instruction(line):
         opcode_bin = int(opcodes[opcode], 2)
         instruction_bin = (opcode_bin << 21) | (int(rm) << 16) | (rn << 5) | rd
         return instruction_bin
+    # Shift instructions
+    if opcode in ["LSL", "LSR"]:
+        rd = get_register(parts[1])
+        rn = get_register(parts[2])
+        rm = 0
+        shamt = int(parts[3].replace("#", "")) & 0x3F
+        opcodes = {
+            "LSL": "11010011011",
+            "LSR": "11010011010",
+        }
+        opcode_bin = int(opcodes[opcode], 2)
+        instruction_bin = (
+            (opcode_bin << 21) | (rm << 16) | (shamt << 10) | (rn << 5) | rd
+        )
+        return instruction_bin
 
     # I-type instructions
     if opcode in ["ADDI", "SUBI"]:
@@ -76,6 +91,8 @@ program = [
     "CBZ X13, #32",
     "CBNZ X14, #64",
     "B #128",
+    "LSL X15, X16, #2",
+    "LSR X17, X18, #3",
 ]
 
 for line in program:
