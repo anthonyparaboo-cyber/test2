@@ -86,22 +86,9 @@ def instruction(line):
 
 
 program = [
-    "ADDI X1, X0, #5",
-    "ADD X2, X1, X3",
-    "LDUR X4, X5, #8",
-    "STUR X6, X7, #16",
-    "SUB X10, X11, X12",
-    "CBZ X13, #-5",
-    "CBNZ X14, #64",
-    "B #128",
-    "LSL X15, X16, #2",
-    "LSR X17, X18, #3",
-    "AND X19, X20, X21",
-    "ORR X22, X23, X24",
-    "EOR X25, X26, X27",
-    "MUL X28, X29, X30",
+    "B, #2",
 ]
 
 for line in program:
-    print(line, " --> ", f"{instruction(line):08X}")
+    # print(line, " --> ", f"{instruction(line):08X}")
     print(line, " --> ", f"{instruction(line):032b}")
